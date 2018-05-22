@@ -7,10 +7,10 @@
 enum TASKS {
     TASK_SYSBLINK,
     TASK_ADC,
-    TASK_FFT,
+    TASK_AMP,
     TASK_COORDS,
     TASK_GYRO,
-    TASK_LPF,
+    TASK_COMPFILT,
     TASK_BUTTON1,
     TASK_BUTTON2,
     TASK_UART_RX,
@@ -19,10 +19,10 @@ enum TASKS {
 };
 
 void adc_task(INT8U id, INT8U state, INT8U event, INT8U data);
-void fft_task(INT8U id, INT8U state, INT8U event, INT8U data);
+void amp_task(INT8U id, INT8U state, INT8U event, INT8U data);
 void coords_task(INT8U id, INT8U state, INT8U event, INT8U data);
 void gyro_task(INT8U id, INT8U state, INT8U event, INT8U data);
-void lpf_task(INT8U id, INT8U state, INT8U event, INT8U data);
+void compfilt_task(INT8U id, INT8U state, INT8U event, INT8U data);
 void button1_task(INT8U id, INT8U state, INT8U event, INT8U data);
 void button2_task(INT8U id, INT8U state, INT8U event, INT8U data);
 void uart_rx_task(INT8U id, INT8U state, INT8U event, INT8U data);

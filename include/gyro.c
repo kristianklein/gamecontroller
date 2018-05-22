@@ -1,9 +1,3 @@
-/*
- * i2c.c
- *
- *  Created on: 3. maj 2018
- *      Author: jespe
- */
 #include <gyro.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -22,6 +16,7 @@
 #include "uart0.h"
 #include "file.h"
 #include "string.h"
+
 //****************************************DEFINES****************************************
 #define MPU_addr            0x68
 #define PWR_MGMT_1          0x6B
@@ -42,10 +37,11 @@
 
 #define ACCELEROMETER_SENSITIVITY 16384
 #define GYROSCOPE_SENSITIVITY 32.8
+#define ALPHA 0.02
 
 #define M_PI 3.14159265359
 
-#define dt 0.005
+#define dt 0.015 // Ændret!
 
 //****************************************Variables****************************************
 INT16S acc_cali[3];
@@ -220,10 +216,10 @@ void complementary_filter(INT16S accData[3], INT16S gyrData[3], float *pitch, fl
 
   // Turning around the X axis results in a vector on the Y-axis
     pitchAcc = atan2f((float)accData[1], (float)accData[2]) * 180 / M_PI;
-    *pitch = *pitch * 0.98 + pitchAcc * 0.02;
+    *pitch = *pitch * (1-ALPHA) + pitchAcc * ALPHA;
     // Turning around the Y axis results in a vector on the X-axis
     rollAcc = atan2f((float)accData[0], (float)accData[2]) * 180 / M_PI;
-    *roll = *roll * 0.98 + rollAcc * 0.02;
+    *roll = *roll * (1-ALPHA) + rollAcc * ALPHA;
 
 }
 

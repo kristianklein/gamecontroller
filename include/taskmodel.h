@@ -10,7 +10,7 @@ enum EVENT_BUFFERS
 	SEB_SW1_TIMEOUT,
 	SEB_SW2_EVENT,
 	SEB_SW2_TIMEOUT,
-	SEB_SYSBLINK,
+	SEB_SYSBLINK
 };
 
 /////////////////////////////////////////////////////////
@@ -53,9 +53,6 @@ enum EVENTS
 	// Semaphore events
 	SE_SIGNAL,
 	SE_WAIT,
-	
-	// LCD events
-	
 };
 
 /////////////////////
@@ -65,7 +62,7 @@ enum SWTIMERS
 {
 	SWT_SYSBLINK,
 	SWT_SW1,
-	SWT_SW2,
+	SWT_SW2
 };
 
 ////////////
@@ -83,10 +80,7 @@ enum QUEUES
 	Q_IR2,
 	Q_IR3,
 	Q_IR4,
-	//Q_IR_AMP,
-	//Q_COORDS,
-	Q_GYRO_RAW,
-	//Q_GYRO
+	Q_GYRO_RAW
 };
 
 ////////////////
@@ -98,4 +92,5 @@ enum SEMAPHORES
 	SEM_DATA_READY = MAX_QUEUES,	// Start here, since the first NUM_QUEUES elements are reserved for queues
 	SEM_AMP_UPDATED,
 	SEM_NEW_EVENT,
+	SEM_GYRO_READY
 };
