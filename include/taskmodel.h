@@ -26,7 +26,8 @@ enum STATE_BUFFERS
 	SSB_IR4_AMP,
 	SSB_COORDS_X,
 	SSB_COORDS_Y,
-	SSB_GYRO
+	SSB_GYRO,
+	SSB_GYRO_Y
 };
 
 ////////////

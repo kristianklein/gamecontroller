@@ -261,3 +261,7 @@ INT8S map_data(float angleF) {
 float get_roll_cali(){
     return roll_cali;
 }
+
+float get_pitch_cali(){
+    return pitch_cali;
+}

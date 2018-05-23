@@ -149,7 +149,7 @@ void compfilt_task(INT8U id, INT8U state, INT8U event, INT8U data)
     static float roll, pitch;
 
     INT16S accelerometer[3], gyro[3];
-    INT8S roll_8bit;
+    INT8S roll_8bit, pitch_8bit;
 
     switch (state)
     {
@@ -166,7 +166,9 @@ void compfilt_task(INT8U id, INT8U state, INT8U event, INT8U data)
             complementary_filter(accelerometer, gyro, &pitch, &roll);
 
             roll_8bit = map_data(roll-get_roll_cali());
+            pitch_8bit = map_data(pitch-get_pitch_cali());
             put_state_msg(SSB_GYRO, roll_8bit);
+            put_state_msg(SSB_GYRO_Y, pitch_8bit);
 
             // Signal SEM_NEW_EVENT semaphore
             sem_wait(SEM_NEW_EVENT); // Take semaphore first, in case another task already signalled it.
@@ -286,8 +288,8 @@ void control_task(INT8U id, INT8U state, INT8U event, INT8U data)
             }
 
             // Get coordinates and roll from state buffers
-            x_coord = get_state_msg(SSB_COORDS_X);
-            y_coord = get_state_msg(SSB_COORDS_Y);
+            x_coord = get_state_msg(SSB_GYRO);
+            y_coord = get_state_msg(SSB_GYRO_Y);
             z_roll = get_state_msg(SSB_GYRO);
 
             hid_send_controls(x_coord, y_coord, z_roll, button, 0);
