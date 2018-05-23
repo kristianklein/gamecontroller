@@ -92,5 +92,4 @@ enum SEMAPHORES
 	SEM_DATA_READY = MAX_QUEUES,	// Start here, since the first NUM_QUEUES elements are reserved for queues
 	SEM_AMP_UPDATED,
 	SEM_NEW_EVENT,
-	SEM_GYRO_READY
 };

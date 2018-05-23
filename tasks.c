@@ -136,11 +136,6 @@ void gyro_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data){
         queue_enqueue(Q_GYRO_RAW, gyro[i]);
     }
 
-    // Set GYRO_READY semaphore
-    sem_signal(SEM_GYRO_READY);
-
-    // Only run every 15 ms
-    rtcs_set_timeout(MILLISEC(15));
     return;
 }
 
@@ -151,31 +146,20 @@ void compfilt_task(INT8U id, INT8U state, INT8U event, INT8U data)
     INT16S accelerometer[3], gyro[3];
     INT8S roll_8bit;
 
-    switch (state)
-    {
-        case 0: // Initialization of task
-            rtcs_wait_semaphore(SEM_GYRO_READY);
-            rtcs_set_state(1);
-            break;
-        case 1:
-            for(int i = 0; i < 3; i++) {
-                accelerometer[i] = queue_dequeue(Q_GYRO_RAW);
-                gyro[i] = queue_dequeue(Q_GYRO_RAW);
-            }
+		for(int i = 0; i < 3; i++) {
+				accelerometer[i] = queue_dequeue(Q_GYRO_RAW);
+				gyro[i] = queue_dequeue(Q_GYRO_RAW);
+		}
 
-            complementary_filter(accelerometer, gyro, &pitch, &roll);
+		complementary_filter(accelerometer, gyro, &pitch, &roll);
 
-            roll_8bit = map_data(roll-get_roll_cali());
-            put_state_msg(SSB_GYRO, roll_8bit);
+		roll_8bit = map_data(roll-get_roll_cali());
+		put_state_msg(SSB_GYRO, roll_8bit);
 
-            // Signal SEM_NEW_EVENT semaphore
-            sem_wait(SEM_NEW_EVENT); // Take semaphore first, in case another task already signalled it.
-            sem_signal(SEM_NEW_EVENT);
+		// Signal SEM_NEW_EVENT semaphore
+		sem_wait(SEM_NEW_EVENT); // Take semaphore first, in case another task already signalled it.
+		sem_signal(SEM_NEW_EVENT);
 
-            // Wait for GYRO_READY semaphore
-            rtcs_wait_semaphore(SEM_GYRO_READY);
-            break;
-    }
 
     return;
 }
@@ -303,7 +287,6 @@ void control_task(INT8U id, INT8U state, INT8U event, INT8U data)
 
 void uart_tx_task(INT8U id, INT8U state, INT8U event, INT8U data)
 {
-    launchpad_rgb(1,0,0);
     while (!queue_is_empty(Q_UART_TX)) // Send entire queue
     {
         if (uart0_tx_rdy())
@@ -320,6 +303,5 @@ void uart_tx_task(INT8U id, INT8U state, INT8U event, INT8U data)
             uart1_putc(transmit_value);
         }
     }
-    launchpad_rgb(0,0,0);
     return;
 }
